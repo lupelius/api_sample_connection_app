@@ -1,0 +1,87 @@
+API Specification to access Reporo data services
+
+Version: 0.3.1
+
+API Gateway URL:
+    http://api.reporo.com/analytics/data-api.php
+
+Method:
+    GET
+
+Response Format:
+    json
+
+Required Headers:
+    x-reporo-epoch:   Request Epoch time
+    x-reporo-key:     User api-key
+    x-reporo-mash:    Signature to validate request
+
+Required parameters:
+    action:   Action
+
+Authentication:
+    A shared secret is used to authenticate the request. Each request needs to be 
+    signed and timestamped.
+
+    Please note, the time used in the request and the time on our servers should be
+    close. The action 'time' can be used to check the epoch time on our servers.
+    Epoch in seconds.
+    
+    In order to sign the request, you need to hash the string resulting after concatenating
+    the epoch time and the shared secret, the hashing algorithm used: sha256.
+    For example:
+  
+    ReporoApiKey = 'ThisIsMyKey';
+    SharedSecret = 'ThisIsASecret';
+    ReqEpoch = TIME(); //Epoch time in seconds
+    Signature = SHA256(ReqEpoch + SharedSecret);
+    
+    Request.addHeader('x-reporo-epoch', ReqEpoch);
+    Request.addHeader('x-reporo-key', ReporoApiKey);
+    Request.addHeader('x-reporo-mash', Signature);
+
+    The shared secret should never be sent as part of the request.
+    The 'time' action is provided to test authentication.
+
+    
+Response in error:
+    Response code: 4XX, 5XX
+    
+    
+Action 'time':
+    Check gateway time.
+
+    Returns:
+        Time in response if signature is correct. An error header otherwise.
+        
+        
+Entity hierarchy:
+    publisher -> website[id] -> zone[id]
+
+
+Fetching Statistics:
+Publishers:
+    Action:     'statistics/publisher': Fetches complete stats for the publisher
+        Required Parameters:
+            from:       From date. Format: Y-m-d
+        Optional Parameters:
+            to:         To date. Format: Y-m-d
+            break:      Breakdown. (entity|date)            
+            
+    Action:     'statistics/publisher/website/123456': Fetches stats for website id 123456
+        Required Parameters:
+            from:       From date. Format: Y-m-d
+        Optional Parameters:
+            to:         To date. Format: Y-m-d
+            break:      Breakdown. (entity|date)                        
+            
+    Action:     'statistics/publisher/zone/123456': Fetches stats for zone id 123456
+        Required Parameters:
+            from:       From date. Format: Y-m-d
+        Optional Parameters:
+            to:         To date. Format: Y-m-d
+            break:      Breakdown. (date)
+
+    Action:    'time': Returns server's time.
+
+
