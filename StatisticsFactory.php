@@ -20,12 +20,12 @@ class StatisticsFactory extends FactoryMethod
 	/**
      * @var key Auth parameter for this particular statistics API call
      */
-	const KEY = "1a30Wjcwrw2WhstgPuHGn9DLzG2jME";
+	const KEY = "xxxx";
 	
 	/**
      * @var shared secret Auth parameter for this particular statistics API call
      */
-	const SHARED_SECRET = "lvXFrjql4P2nnLiCCyGGDYNPNQfcLV0n8vX5hUSrxtFdUvRW1wdFva0L1xL3";
+	const SHARED_SECRET = "xxxx";
     
 	/**
      * {@inheritdoc}
